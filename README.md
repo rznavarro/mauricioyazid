@@ -23,6 +23,18 @@ Copiar `.env.example` a `.env.local` (local) o configurarlas en el hosting:
 
 Son variables `NEXT_PUBLIC_`: se fijan al construir. Después de cambiarlas hay que volver a ejecutar `npm run build`.
 
+### Cuestionario interno (`/cuestionario`)
+
+Página oculta (sin enlaces, fuera del sitemap y con `noindex`) para que Mauricio responda preguntas sobre su empresa. Guarda el avance en su dispositivo, permite descargar las respuestas y las envía por correo con [Resend](https://resend.com):
+
+| Variable | Uso |
+|---|---|
+| `RESEND_API_KEY` | Clave de la API de Resend (solo servidor; nunca con prefijo `NEXT_PUBLIC_`). |
+| `CUESTIONARIO_DESTINO` | Correo que recibe las respuestas. Con el remitente por defecto debe ser el mismo correo de la cuenta de Resend. |
+| `CUESTIONARIO_REMITENTE` | Opcional. Remitente con dominio verificado en Resend (por defecto `onboarding@resend.dev`). |
+
+Sin estas variables, el formulario avisa que el envío no está activado y ofrece descargar las respuestas.
+
 ## Fotos
 
 Copiar a `public/images/` con estos nombres exactos:
@@ -50,7 +62,7 @@ Las fuentes de `assets/fonts/` (Anton e Inter, licencia SIL OFL 1.1, ver `OFL-*.
 - `src/components/sections/`: las secciones, en el orden de la página.
 - `src/components/reactbits/`: componentes de React Bits (adaptados; cada archivo explica qué cambió y por qué).
 - `src/components/three/HeroDust.tsx`: partículas 3D del hero (solo escritorio).
-- `src/app/`: layout, metadata, imagen OG, íconos, sitemap, robots y `llms.txt`.
+- `src/app/`: layout raíz, metadata, imagen OG, íconos, sitemap, robots y `llms.txt`; el landing vive en `src/app/(sitio)/` y el cuestionario en `src/app/cuestionario/` (preguntas en `src/content/cuestionario.ts`).
 
 ## Notas de rendimiento
 

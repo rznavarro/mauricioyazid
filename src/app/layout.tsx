@@ -4,10 +4,6 @@ import "./globals.css";
 import { anton, inter } from "./fonts";
 import { brand, seo, siteUrl } from "@/content/site";
 import { BrandIconSprite } from "@/components/icons/brand";
-import { Footer } from "@/components/layout/Footer";
-import { FloatingContact } from "@/components/layout/FloatingContact";
-import { Header } from "@/components/layout/Header";
-import { SmoothScroll } from "@/components/layout/SmoothScroll";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -52,14 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body>
         <BrandIconSprite />
-        <SmoothScroll>
-          <Header />
-          <main id="contenido-principal" tabIndex={-1} className="outline-none">
-            {children}
-          </main>
-          <Footer />
-          <FloatingContact />
-        </SmoothScroll>
+        {children}
       </body>
     </html>
   );
