@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mauricio Yazid · Empresa Autónoma
 
-## Getting Started
+Sitio de una sola página. Next.js (App Router) + React + TypeScript + Tailwind CSS 4 + shadcn/ui, con GSAP/ScrollTrigger, Lenis, React Three Fiber y componentes de React Bits.
 
-First, run the development server:
+## Desarrollo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # build de producción (debe terminar sin errores ni warnings)
+npm start          # sirve el build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variables de entorno
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copiar `.env.example` a `.env.local` (local) o configurarlas en el hosting:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Uso |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | URL canónica sin barra final (ej. `https://mauricioyazid.cl`). Se usa en canonical, Open Graph, sitemap, robots, JSON-LD y `llms.txt`. En Vercel, si no se define, se usa el dominio de producción del proyecto; conviene definirla igual con el dominio definitivo. |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Opcional. Número en formato internacional sin `+` ni espacios. Si existe, todos los "Escríbeme" abren WhatsApp; si no, el mensaje directo de Instagram. |
 
-## Learn More
+Son variables `NEXT_PUBLIC_`: se fijan al construir. Después de cambiarlas hay que volver a ejecutar `npm run build`.
 
-To learn more about Next.js, take a look at the following resources:
+## Fotos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Copiar a `public/images/` con estos nombres exactos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Archivo | Sección | Tamaño |
+|---|---|---|
+| `mauricio-retrato.png` | Hero (PNG con transparencia) | 1200×1500 |
+| `historia-01-equipo.jpg` | Historia, etapa 01 | 1600×1200 |
+| `historia-02-oficina.jpg` | Historia, etapa 02 | 1600×1200 |
+| `historia-03-retrato.jpg` | Historia, etapa 03 | 1600×1200 |
+| `historia-04-hoy.jpg` | Historia, etapa 04 | 1600×1200 |
 
-## Deploy on Vercel
+Mientras falte una foto se muestra su panel de reemplazo. La página se genera estática, así que **después de agregar o cambiar fotos hay que volver a construir** (`npm run build`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Despliegue en Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Importar el repositorio en Vercel (se detecta Next.js solo; sin configuración extra). Cada push a `main` publica en producción. Después de conectar el dominio propio, definir `NEXT_PUBLIC_SITE_URL` en *Settings → Environment Variables* y volver a desplegar.
+
+Las fuentes de `assets/fonts/` (Anton e Inter, licencia SIL OFL 1.1, ver `OFL-*.txt`) solo se usan para generar la imagen para compartir y los íconos.
+
+## Dónde está cada cosa
+
+- `src/content/site.ts`: todo el texto del sitio (fuente única para la interfaz, el JSON-LD y `llms.txt`).
+- `src/lib/contact.ts`: destino de los botones "Escríbeme".
+- `src/components/sections/`: las secciones, en el orden de la página.
+- `src/components/reactbits/`: componentes de React Bits (adaptados; cada archivo explica qué cambió y por qué).
+- `src/components/three/HeroDust.tsx`: partículas 3D del hero (solo escritorio).
+- `src/app/`: layout, metadata, imagen OG, íconos, sitemap, robots y `llms.txt`.
+
+## Notas de rendimiento
+
+- Las animaciones bajo el pliegue se arman en tiempo libre después de la hidratación (`src/lib/defer.ts`), y esas secciones usan `content-visibility: auto` hasta que les toca.
+- motion (ScrollVelocity, CountUp), Lenis y Three.js se cargan aparte, fuera del JavaScript inicial.
+- Con `prefers-reduced-motion: reduce` no hay Lenis, pin, scrub ni 3D, y todo el contenido queda visible.
